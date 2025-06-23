@@ -1,10 +1,14 @@
+import { Button } from "../../../stories/Button";
+
 interface SideLoginPanelProps {
     isLogin?: boolean,
+    onToggle?: () => {},
 }
 
 export const SideLoginPanel = ({
-
-}) => {
+    isLogin,
+    onToggle,
+}: SideLoginPanelProps) => {
     return (
         <div
             className={`w-full md:w-1/2 flex items-center justify-center p-8 md:p-16 ${isLogin ? 'bg-blue-600' : 'bg-green-600'}`}
@@ -18,13 +22,7 @@ export const SideLoginPanel = ({
                         ? 'Sign up and discover a great amount of new opportunities!'
                         : 'Sign in to access your account and continue your journey!'}
                 </p>
-                <button
-                    className="bg-white px-6 py-3 rounded-lg"
-                    style={{ color: isLogin ? '#2563EB' : '#059669' }}
-                    onClick={toggleMode}
-                >
-                    {isLogin ? 'Sign Up' : 'Sign In'}
-                </button>
+                <Button isLogin={isLogin} onClick={onToggle} />
             </div>
         </div>
     )
