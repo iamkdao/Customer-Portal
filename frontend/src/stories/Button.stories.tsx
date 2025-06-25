@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import Header from './Header';
+import { Button } from './Button';
 
 const meta = {
-  component: Header,
-} satisfies Meta<typeof Header>;
+  component: Button,
+} satisfies Meta<typeof Button>;
 
 export default meta;
 

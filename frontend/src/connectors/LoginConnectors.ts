@@ -10,6 +10,7 @@ export const mapStateToProps = (state) => ({
     lastName: state.auth.form.lastName,
     username: state.auth.form.username,
     statusCode: state.auth.statusCode,
+    token: state.auth.token,
 });
 
 export const mapDispatchToProps = (dispatch) => ({
@@ -18,4 +19,5 @@ export const mapDispatchToProps = (dispatch) => ({
     toggleLogin: () => dispatch(actions.toggleLogin()),
     updateFormField: (payload) => dispatch(actions.updateFormField(payload)),
     submitForm: () => dispatch(actions.submitForm()),
+    logout: () => dispatch(actions.logout()),
 });

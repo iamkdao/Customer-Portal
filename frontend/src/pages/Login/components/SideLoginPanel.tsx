@@ -1,4 +1,4 @@
-import { Button } from "../../../stories/Button";
+import { SignupButton } from "../../../stories/SignupButton";
 
 interface SideLoginPanelProps {
     isLogin?: boolean,
@@ -22,7 +22,7 @@ export const SideLoginPanel = ({
                         ? 'Sign up and discover a great amount of new opportunities!'
                         : 'Sign in to access your account and continue your journey!'}
                 </p>
-                <Button isLogin={isLogin} onClick={onToggle} />
+                <SignupButton isLogin={isLogin} onClick={onToggle} />
             </div>
         </div>
     )

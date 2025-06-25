@@ -1,12 +1,19 @@
-import React from "react";
+import { useState } from "react";
 import { ExpandPanel } from "../../stories/ExpandPanel";
+import { InfoCard } from "../../stories/InfoCard";
 import { Card } from "../../stories/Cards";
+import Header from "../../stories/Header";
 import '../../index.css'
 
 const EstimatePage = () => {
+    const [squareFootage, setSquareFootage] = useState('');
+    const [commuteTime, setCommuteTime] = useState('');
+
     return (
-        <div
-            className="
+        <div>
+            <Header />
+            <div
+                className="
 				flex
 				justify-center
 				items-start
@@ -19,9 +26,9 @@ const EstimatePage = () => {
 				lg:px-20
 				xl:px-44
 			"
-        >
-            <div
-                className="
+            >
+                <div
+                    className="
 					flex
 					w-full
 					sm:w-9/12
@@ -35,16 +42,24 @@ const EstimatePage = () => {
 					space-y-12
 					lg:space-y-0
 				"
-            >
-                <div className="w-full lg:w-1/2 flex flex-col items-start">
-                    <div className="space-y-4 flex flex-col w-full">
-                        <ExpandPanel label="Name" placeholder="John" />
-                        <ExpandPanel label="Email" placeholder="john@gmail.com" />
+                >
+                    <div className="w-full lg:w-1/2 flex flex-col items-start">
+                        <div className="space-y-4 flex flex-col w-full">
+                            <InfoCard
+                                onSquareFootageChange={setSquareFootage}
+                                onCommuteTimeChange={setCommuteTime}
+                                squareFootage={squareFootage}
+                                commuteTime={commuteTime}
+                            />
+                        </div>
                     </div>
-                </div>
 
-                <div className="w-full lg:w-1/2">
-                    <Card />
+                    <div className="w-full lg:w-1/2">
+                        <Card
+                            squareFootage={squareFootage}
+                            commuteTime={commuteTime}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

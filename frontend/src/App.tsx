@@ -3,8 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ProtectedRoute from './pages/ProtectedRoute'
 import LoginPage from './pages/Login/LoginPage'
 import HomePage from './pages/Home/HomePage'
-import Checkout5 from './pages/Estimate/EstimatePage'
-import { ExpandPanel } from './stories/ExpandPanel'
+import EstimatePage from './pages/Estimate/EstimatePage'
 
 function App() {
   return (
@@ -14,6 +13,12 @@ function App() {
         <Route path="/home" element={
           <ProtectedRoute>
             <HomePage />
+          </ProtectedRoute>
+        }
+        />
+        <Route path="/estimates" element={
+          <ProtectedRoute>
+            <EstimatePage />
           </ProtectedRoute>
         }
         />

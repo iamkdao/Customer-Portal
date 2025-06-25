@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import Header from './Header';
+import { InfoCard } from './InfoCard';
 
 const meta = {
-  component: Header,
-} satisfies Meta<typeof Header>;
+  component: InfoCard,
+} satisfies Meta<typeof InfoCard>;
 
 export default meta;
 
