@@ -6,24 +6,30 @@ import { API } from '../../config';
 
 function* handleLogin(action: ReturnType<typeof actions.loginRequest>) {
     try {
-        const response: { data: { access: string } } = yield call(
+        const response: { data: { access: string }, status: number } = yield call(
             axios.post,
             `${API.BASE_URL}${API.ENDPOINTS.LOGIN}`,
             action.payload
         );
 
+        localStorage.setItem('authToken', response.data.access)
+
         yield put(actions.authSuccess({
             token: response.data.access,
             user: { email: action.payload.email },
+            status: response.status,
         }));
     } catch (error: any) {
-        yield put(actions.authFailure(error.response?.data?.message || 'Login failed'));
+        yield put(actions.authFailure({
+            message: error.response?.data?.message || 'Login failed',
+            status: error.response?.status,
+        }));
     }
 }
 
 function* handleRegister(action: ReturnType<typeof actions.registerRequest>) {
     try {
-        const response: { data: { access: string } } = yield call(
+        const response: { data: { access: string }, status: number } = yield call(
             axios.post,
             `${API.BASE_URL}${API.ENDPOINTS.REGISTER}`,
             {
@@ -42,9 +48,13 @@ function* handleRegister(action: ReturnType<typeof actions.registerRequest>) {
                 firstName: action.payload.firstName,
                 lastName: action.payload.lastName,
             },
+            status: response.status,
         }));
     } catch (error: any) {
-        yield put(actions.authFailure(error.response?.data?.message || 'Registration failed'));
+        yield put(actions.authFailure({
+            message: error.response?.data?.message || 'Registration failed',
+            status: error.response?.status,
+        }));
     }
 }
 

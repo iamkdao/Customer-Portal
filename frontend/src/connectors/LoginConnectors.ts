@@ -9,6 +9,7 @@ export const mapStateToProps = (state) => ({
     firstName: state.auth.form.firstName,
     lastName: state.auth.form.lastName,
     username: state.auth.form.username,
+    statusCode: state.auth.statusCode,
 });
 
 export const mapDispatchToProps = (dispatch) => ({

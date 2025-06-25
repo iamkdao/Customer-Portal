@@ -21,10 +21,32 @@ interface AuthState {
         lastName: string;
         username: string;
     }
+    statusCode: number | null;
 }
 
+const loadTokenFromStorage = (): string | null => {
+    try {
+        return localStorage.getItem('authToken');
+    } catch (error) {
+        console.error('Failed to load token from storage', error);
+        return null;
+    }
+};
+
+const saveTokenToStorage = (token: string | null) => {
+    try {
+        if (token) {
+            localStorage.setItem('authToken', token);
+        } else {
+            localStorage.removeItem('authToken');
+        }
+    } catch (error) {
+        console.error('Failed to save token to storage', error);
+    }
+};
+
 export const initialState: AuthState = {
-    token: null,
+    token: loadTokenFromStorage(),
     user: null,
     error: null,
     loading: false,
@@ -35,7 +57,8 @@ export const initialState: AuthState = {
         firstName: '',
         lastName: '',
         username: '',
-    }
+    },
+    statusCode: null,
 };
 
 export const authSlice = createSlice({
@@ -62,19 +85,27 @@ export const authSlice = createSlice({
         authSuccess: (state, action: PayloadAction<{
             token: string;
             user: User;
+            status?: number;
         }>) => {
             state.token = action.payload.token;
             state.user = action.payload.user;
             state.loading = false;
             state.error = null;
+            state.statusCode = action.payload.status || 200;
+            saveTokenToStorage(action.payload.token);
         },
-        authFailure: (state, action: PayloadAction<string>) => {
-            state.error = action.payload;
+        authFailure: (state, action: PayloadAction<{
+            message: string;
+            status?: number;
+        }>) => {
+            state.error = action.payload.message;
             state.loading = false;
+            state.statusCode = action.payload.status || 400;
         },
         logout: (state) => {
             state.token = null;
             state.user = null;
+            saveTokenToStorage(null);
         },
 
         // Handles mode switching

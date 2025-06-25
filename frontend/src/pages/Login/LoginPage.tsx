@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react'
-import { Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, IdCard } from 'lucide-react';
 import { InputField } from '../../stories/InputField';
 import { SubmitButton } from '../../stories/SubmitButton';
 import { SideLoginPanel } from './components/SideLoginPanel';
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../connectors/LoginConnectors';
 import '../../index.css'
+import { useNavigate } from 'react-router-dom';
 
 interface LoginPageProps {
     loading: boolean;
@@ -17,6 +18,7 @@ interface LoginPageProps {
     firstName: string;
     lastName: string;
     username: string;
+    statusCode: number;
     loginRequest: (payload: { email: string, password: string }) => {};
     registerRequest: (payload: { firstName: string, lastName: string, email: string, password: string }) => {};
     toggleLogin: () => {};
@@ -36,8 +38,28 @@ const LoginPage = (props: LoginPageProps) => {
         username,
         toggleLogin,
         updateFormField,
-        submitForm
+        submitForm,
+        statusCode
     } = props;
+
+    const [statusLocal, setStatusLocal] = useState<number | null>(null);
+
+    useEffect(() => {
+        if (statusCode !== undefined)
+            setStatusLocal(statusCode);
+    }, [statusCode]);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (statusCode && statusCode >= 200 && statusCode < 300) {
+            // Navigate to home after successful registration
+            if (isLogin) {
+                navigate('/home');
+            }
+            // For login success, you might handle differently (e.g., redirect to dashboard)
+        }
+    }, [statusCode, isLogin, navigate]);
 
     const formVariants = {
         hidden: { opacity: 0, x: -30 },
@@ -48,9 +70,13 @@ const LoginPage = (props: LoginPageProps) => {
         updateFormField({ field, value: e.target.value });
     };
 
+    const handleToggle = () => {
+        setStatusLocal(null); // Reset status when toggling
+        toggleLogin();
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Form submitted");
         submitForm();
     };
 
@@ -72,16 +98,26 @@ const LoginPage = (props: LoginPageProps) => {
                             </h1>
                             <div className="space-y-4">
                                 {!isLogin && (
-                                    <div className='space-y-4'>
+                                    < div className='space-y-4'>
+                                        {statusLocal !== null && (
+                                            <>
+                                                {statusLocal >= 200 && statusLocal < 300 && (
+                                                    <h2 className="mb-4 text-green-600">Please log in or refresh the browser.</h2>
+                                                )}
+                                                {statusLocal >= 400 && (
+                                                    <h2 className="mb-4 text-red-600">Username or email is already taken.</h2>
+                                                )}
+                                            </>
+                                        )}
                                         <InputField
-                                            icon={User}
+                                            icon={IdCard}
                                             placeholder="First Name"
                                             type="text"
                                             value={firstName}
                                             onChange={handleChange('firstName')}
                                         />
                                         <InputField
-                                            icon={User}
+                                            icon={IdCard}
                                             placeholder="Last Name"
                                             type="text"
                                             value={lastName}
@@ -95,6 +131,9 @@ const LoginPage = (props: LoginPageProps) => {
                                             onChange={handleChange('username')}
                                         />
                                     </div>
+                                )}
+                                {isLogin && statusLocal !== null && statusLocal >= 400 && (
+                                    <h2 className="mb-4 text-red-600">Invalid email or password.</h2>
                                 )}
                                 <InputField
                                     icon={Mail}
@@ -118,8 +157,8 @@ const LoginPage = (props: LoginPageProps) => {
                 </div>
             </div>
             {/* ... (right side panel) */}
-            <SideLoginPanel isLogin={isLogin} onToggle={toggleLogin} />
-        </div>
+            <SideLoginPanel isLogin={isLogin} onToggle={handleToggle} />
+        </div >
     );
 };
 
