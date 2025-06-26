@@ -4,6 +4,7 @@ import ProtectedRoute from './pages/ProtectedRoute'
 import LoginPage from './pages/Login/LoginPage'
 import HomePage from './pages/Home/HomePage'
 import EstimatePage from './pages/Estimate/EstimatePage'
+import ServicesPage from './pages/Services/ServicesPage'
 
 function App() {
   return (
@@ -19,6 +20,12 @@ function App() {
         <Route path="/estimates" element={
           <ProtectedRoute>
             <EstimatePage />
+          </ProtectedRoute>
+        }
+        />
+        <Route path="/services" element={
+          <ProtectedRoute>
+            <ServicesPage />
           </ProtectedRoute>
         }
         />
